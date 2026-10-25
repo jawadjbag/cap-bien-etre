@@ -1,7 +1,7 @@
 (() => {
   'use strict';
   const STORAGE = 'cap_bien_etre_v1';
-  const defaults = () => ({ settings: { startDate:'2026-10-11', startWeight:107, bedTarget:'23:00' }, entries:{} });
+  const defaults = () => ({ settings: { startDate:'2026-10-11', startWeight:107, goalWeight:null, bedTarget:'23:00' }, entries:{} });
   const el = id => document.getElementById(id);
   const today = () => { const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; };
   const safeDate = s => /^\d{4}-\d{2}-\d{2}$/.test(s) && !Number.isNaN(new Date(s+'T12:00:00').getTime());
@@ -14,6 +14,7 @@
     if(o.settings && typeof o.settings==='object') {
       if(safeDate(o.settings.startDate))d.settings.startDate=o.settings.startDate;
       const w=Number(o.settings.startWeight);if(validWeight(w)&&w!==null)d.settings.startWeight=w;
+      if(o.settings.goalWeight!==null && o.settings.goalWeight!=='' && o.settings.goalWeight!==undefined){const g=Number(o.settings.goalWeight);if(validWeight(g)&&g>0&&g<d.settings.startWeight)d.settings.goalWeight=g;}
       if(/^([01]\d|2[0-3]):[0-5]\d$/.test(o.settings.bedTarget))d.settings.bedTarget=o.settings.bedTarget;
     }
     if(o.entries && typeof o.entries==='object' && !Array.isArray(o.entries)) {
@@ -95,5 +96,30 @@
   el('exportBtn').addEventListener('click',()=>{const data=JSON.stringify({...state,exportDate:new Date().toISOString(),format:'cap-bien-etre-v1'},null,2);const blob=new Blob([data],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`CAP-sauvegarde-${today()}.json`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);});
   el('importBtn').addEventListener('click',()=>el('importFile').click());
   el('importFile').addEventListener('change',async e=>{const file=e.target.files?.[0];if(!file)return;try{const data=JSON.parse(await file.text());if(!data||typeof data!=='object'||!data.settings||!data.entries||Array.isArray(data.entries))throw Error('Fichier incompatible');if(!confirm('Importer remplacera les données actuellement enregistrées sur cet appareil. Continuer ?'))return;state=clean(data);store();activeDate=today();loadForm();activate('todayPanel');alert('Sauvegarde importée.');}catch(err){alert('Impossible de lire cette sauvegarde CAP.');}finally{e.target.value='';}});
+
+  // API for the weight-focused dashboard. Existing diary storage is unchanged.
+  window.CAP_API={
+    read:()=>clean(state),
+    addWeight:(d,v)=>{
+      if(!safeDate(d)||d<state.settings.startDate||d>today()||!validWeight(v)||v===null)return false;
+      const entry=state.entries[d]??emptyEntry();entry.weight=v;state.entries[d]=entry;
+      store();refreshTotals();if(activeDate===d)loadForm();return true;
+    },
+    setHabitToday:(key,value)=>{
+      if(!['sugar','phone','food','bed'].includes(key))return false;
+      const d=today(),entry=state.entries[d]??emptyEntry();
+      entry.habits[key]=Boolean(value);state.entries[d]=entry;store();refreshTotals();
+      if(activeDate===d)loadForm();return true;
+    },
+    setGoalWeight:value=>{
+      if(value!==null&&(!validWeight(value)||value>=state.settings.startWeight))return false;
+      state.settings.goalWeight=value;store();return true;
+    },
+    openPanel:activate,
+    openJournalDate:d=>{
+      if(!safeDate(d)||d>today())return;
+      activeDate=d;activate('todayPanel');loadForm();
+    }
+  };
   loadForm();if('serviceWorker' in navigator&&location.protocol.startsWith('http'))window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
 })();
