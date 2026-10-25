@@ -1,0 +1,43 @@
+/* CAP v2 — tableau de bord du poids */
+.cap-dashboard .section-title{margin-top:24px}
+.cap-dashboard .section-title h2{font-size:19px}
+.cap-graph-card{padding:18px 14px 14px;overflow:hidden;background:linear-gradient(175deg,#fff 30%,#f1f8eb 100%)}
+.cap-metrics{display:grid;grid-template-columns:1.1fr 1fr;gap:9px}
+.cap-metric{border-radius:16px;background:#f1f5ee;padding:16px 13px 13px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.cap-metric.cap-dark{background:#102b21;color:#fff}
+.cap-metric small{font-size:10px;font-weight:820;letter-spacing:.7px;opacity:.78}
+.cap-metric strong{font-size:32px;letter-spacing:-1.4px;line-height:1.14;font-weight:900;font-variant-numeric:tabular-nums;white-space:nowrap}
+.cap-metric strong small{font-size:14px;letter-spacing:0}
+.cap-metric span{font-size:11px;opacity:.8;min-height:14px}
+.cap-graph-heading,.cap-graph-bottom{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.cap-graph-heading{margin:22px 0 6px}
+.cap-graph-heading>strong{font-size:13px}
+.cap-chips{display:flex;gap:4px;flex-wrap:wrap}
+.cap-chips button{background:#fff;border:1px solid #dae5d6;border-radius:9px;padding:7px 9px;font-size:11px;font-weight:800;color:#647369}
+.cap-chips button.active{background:#153329;color:#fff;border-color:#153329}
+#capWeightSVG{width:100%;height:auto;display:block;min-height:220px;touch-action:manipulation}
+#capWeightSVG [data-cap-date]{cursor:pointer}
+.cap-graph-bottom{margin-top:0}
+#capPlotCount{font-size:11px;color:#69766f}
+.cap-selected{background:#eaf4e3;border:1px solid #d6e8ce;border-radius:11px;padding:11px 12px;margin:9px 0 0;font-size:12px;display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap;color:#395642}
+.cap-selected strong{font-variant-numeric:tabular-nums}
+.cap-caption{font-size:10px;color:#829086;line-height:1.5;margin-top:9px}
+.cap-entry{background:linear-gradient(160deg,#eaf6da,#f9fcf5);border-color:#d8ebcb}
+.cap-entry-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cap-entry input{background:#fff;width:100%;min-width:0}
+.cap-entry .primary{margin-top:13px}
+.cap-goal-head{display:flex;gap:14px;justify-content:space-between;align-items:center}
+.cap-goal-head strong{font-size:16px;display:block;margin-bottom:6px}
+.cap-goal-track{background:#e9efe4;height:11px;border-radius:50px;overflow:hidden;margin:18px 0 9px}
+.cap-goal-track>span{width:0;display:block;background:linear-gradient(90deg,#81ba57,#b3db8b);height:100%;border-radius:50px;transition:width .25s}
+.cap-goal-btn,.cap-link{border:0;background:#e7f5db;color:#28512a;border-radius:10px;padding:10px 12px;font-size:11px;font-weight:820;white-space:nowrap}
+.cap-habit-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.cap-habit-grid button{border:1px solid #dfe6da;border-radius:13px;padding:13px 10px;min-height:50px;text-align:left;background:#fff;color:#56665b;font-size:12px;font-weight:770;line-height:1.35}
+.cap-habit-grid button[aria-pressed=true]{background:#e8f6db;border-color:#a8d481;color:#28552e}
+.cap-mini-kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cap-mini-kpis .surface{padding:17px 16px}
+.cap-mini-kpis strong{display:block;font-size:29px;letter-spacing:-1px}
+.cap-mini-kpis small{display:block;color:#69766f;font-size:11px;margin-top:3px}
+.cap-dashboard #capRecent .history-item{margin-bottom:8px}
+.cap-dashboard .secondary{margin-top:12px}
+@media(max-width:390px){.cap-graph-card{padding:15px 11px}.cap-metric strong{font-size:27px}.cap-metric{padding:14px 10px}.cap-chips button{padding:7px 8px}.cap-entry-grid input{padding:11px 9px}}
